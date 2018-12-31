@@ -18,6 +18,16 @@ void __attribute__((noreturn, format(printf, 1, 2))) err_dump(const char *fmt, .
 void __attribute__((format(printf, 1, 2))) err_msg(const char *fmt, ...);
 void __attribute__((noreturn, format(printf, 1, 2))) err_quit(const char *fmt, ...);
 
+extern int log_to_stderr;
+
+void log_open(const char *ident, int option, int facility);
+void __attribute__((format(printf, 1, 2))) log_ret(const char *fmt, ...);
+void __attribute__((noreturn, format(printf, 1, 2))) log_sys(const char *fmt, ...);
+void __attribute__((format(printf, 2, 3))) log_cont(int error, const char *fmt, ...);
+void __attribute__((noreturn, format(printf, 2, 3))) log_exit(int error, const char *fmt, ...);
+void __attribute__((format(printf, 1, 2))) log_msg(const char *fmt, ...);
+void __attribute__((noreturn, format(printf, 1, 2))) log_quit(const char *fmt, ...);
+
 ssize_t readn(int fd, void *ptr, size_t n);
 ssize_t writen(int fd, const void *ptr, size_t n);
 
@@ -44,4 +54,7 @@ int recv_fd(int fd, ssize_t (*userfunc)(int, const void *, size_t));
  * using the send_fd()/recv_fd() protocol.
  */
 int send_err(int fd, int errcode, const char *msg);
+
+
+
 #endif

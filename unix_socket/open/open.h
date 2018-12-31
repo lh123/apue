@@ -5,6 +5,7 @@
 #include <errno.h>
 
 #define CL_OPEN "open"
+#define CS_OPEN "/tmp/opend.socket"
 
 /*
  * Open the file by sending the "name" and "oflag" to the

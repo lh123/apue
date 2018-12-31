@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
         if (fd < 0) {
             continue;
         }
-
+        printf("received fd %d\n", fd);
         int n;
         while ((n = read(fd, buf, BUFFSIZE)) > 0) {
             if (write(STDOUT_FILENO, buf, n) != n) {

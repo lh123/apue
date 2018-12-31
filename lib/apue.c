@@ -14,72 +14,7 @@
 #include <sys/stat.h>
 
 
-static void err_doit(int errnoflag, int error, const char *fmt, va_list ap) {
-    char buf[MAXLINE];
 
-    vsnprintf(buf, MAXLINE - 1, fmt, ap);
-    if (errnoflag) {
-        snprintf(buf + strlen(buf), MAXLINE - strlen(buf) - 1,": %s", strerror(error));
-    }
-    strcat(buf, "\n");
-    fflush(stdout);
-    fputs(buf, stdout);
-    fflush(stdout);
-}
-
-void err_ret(const char *fmt, ...) {
-    va_list ap;
-    va_start(ap, fmt);
-    err_doit(1, errno, fmt, ap);
-    va_end(ap);
-}
-
-void err_sys(const char *fmt, ...) {
-    va_list ap;
-    va_start(ap, fmt);
-    err_doit(1, errno, fmt, ap);
-    va_end(ap);
-    exit(1);
-}
-
-void err_cont(int error, const char *fmt, ...) {
-    va_list ap;
-    va_start(ap, fmt);
-    err_doit(1, error, fmt, ap);
-    va_end(ap);
-}
-
-void err_exit(int error, const char *fmt, ...) {
-    va_list ap;
-    va_start(ap, fmt);
-    err_doit(1, error, fmt, ap);
-    va_end(ap);
-    exit(1);
-}
-
-void err_dump(const char *fmt, ...) {
-    va_list ap;
-    va_start(ap, fmt);
-    err_doit(1, errno, fmt, ap);
-    va_end(ap);
-    abort();
-    exit(1);
-}
-
-void err_msg(const char *fmt, ...) {
-    va_list ap;
-    va_start(ap, fmt);
-    err_doit(0, 0, fmt, ap);
-    va_end(ap);
-}
-
-void err_quit(const char *fmt, ...) {
-    va_list ap;
-    va_start(ap, fmt);
-    err_doit(0, 0, fmt, ap);
-    va_end(ap);
-    exit(1);
-}
 
 ssize_t readn(int fd, void *ptr, size_t n) {
     size_t nleft = n;
@@ -217,7 +152,7 @@ errout:
     return rval;
 }
 
-#define CLI_PATH "/var/tmp"
+#define CLI_PATH "/tmp"
 #define CLI_PERM S_IRWXU
 
 int cli_conn(const char *name) {
@@ -233,7 +168,7 @@ int cli_conn(const char *name) {
     }
     memset(&un, 0, sizeof(un));
     un.sun_family = AF_UNIX;
-    snprintf(un.sun_path, sizeof(un.sun_path), "%s%05ld", CLI_PATH, (long)getpid());
+    snprintf(un.sun_path, sizeof(un.sun_path), "%s/%05ld", CLI_PATH, (long)getpid());
     unlink(un.sun_path);
 
     int rval;
