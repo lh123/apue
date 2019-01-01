@@ -13,9 +13,6 @@
 #include <sys/socket.h>
 #include <sys/stat.h>
 
-
-
-
 ssize_t readn(int fd, void *ptr, size_t n) {
     size_t nleft = n;
 
