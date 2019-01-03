@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <termios.h>
 
 void __attribute__((format(printf, 1, 2))) err_ret(const char *fmt, ...);
 void __attribute__((noreturn, format(printf, 1, 2))) err_sys(const char *fmt, ...);
@@ -55,6 +56,19 @@ int recv_fd(int fd, ssize_t (*userfunc)(int, const void *, size_t));
  */
 int send_err(int fd, int errcode, const char *msg);
 
+// put terminal into a cbreak mode.
+int tty_cbreak(int fd);
 
+// put terminal into a raw mode.
+int tty_raw(int fd);
+
+// restore terminal's mode.
+int tty_reset(int fd);
+
+// can be set up by atexit(tty_atexit).
+void tty_atexit(void);
+
+// let caller see original tty state.
+struct termios *tty_termios(void);
 
 #endif
