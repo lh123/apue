@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <termios.h>
+#include <sys/ioctl.h>
 
 void __attribute__((format(printf, 1, 2))) err_ret(const char *fmt, ...);
 void __attribute__((noreturn, format(printf, 1, 2))) err_sys(const char *fmt, ...);
@@ -70,5 +71,13 @@ void tty_atexit(void);
 
 // let caller see original tty state.
 struct termios *tty_termios(void);
+
+int ptym_open(char *pts_name, int pts_namesz);
+
+int ptys_open(char *pts_name);
+
+pid_t pty_fork(int *ptrfdm, char *slave_name, int slave_namesz,
+                const struct termios *slave_termios, 
+                const struct winsize *slave_winsize);
 
 #endif
