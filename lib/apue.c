@@ -8,10 +8,22 @@
 #include <time.h>
 #include <stddef.h>
 #include <stdalign.h>
+#include <fcntl.h>
 
 #include <sys/un.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
+
+int lock_reg(int fd, int cmd, int type, off_t offset, int whence, off_t len) {
+    struct flock lock;
+
+    lock.l_type = type;
+    lock.l_start = offset;
+    lock.l_whence = whence;
+    lock.l_len = len;
+
+    return fcntl(fd, cmd, &lock);
+}
 
 ssize_t readn(int fd, void *ptr, size_t n) {
     size_t nleft = n;
